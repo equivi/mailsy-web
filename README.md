@@ -1,4 +1,2 @@
-demailer-web
-============
-
-dEmailer Web App
+# mailsy-web
+Mailsy Web
