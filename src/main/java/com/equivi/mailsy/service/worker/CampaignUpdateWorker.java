@@ -30,7 +30,7 @@ public class CampaignUpdateWorker {
     @Resource(name = "mailgunRestTemplateEmailService")
     private MailgunService mailgunService;
 
-    @Scheduled(fixedDelay = 30000)
+    //@Scheduled(fixedDelay = 30000)
     public void collectCampaignQueueAndSendMail() {
 
         LOG.info("Collect Campaign Queue and send email");
