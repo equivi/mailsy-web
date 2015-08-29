@@ -1,7 +1,6 @@
 package com.equivi.mailsy.web.listener;
 
 
-import com.equivi.mailsy.service.authentication.AuthenticationService;
 import com.equivi.mailsy.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +22,10 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
     @Resource
     private UserService userService;
 
-    @Resource
-    private AuthenticationService authenticationService;
-
     @Override
     public void onApplicationEvent(AbstractAuthenticationEvent appEvent) {
         if (appEvent instanceof AuthenticationSuccessEvent) {
 
-            AuthenticationSuccessEvent event = (AuthenticationSuccessEvent) appEvent;
             // add code here to handle successful login event
             // Add event to system logger for reporting purpose later
             // Reset Failed Login
@@ -39,9 +34,6 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
         }
 
         if (appEvent instanceof AuthenticationFailureBadCredentialsEvent) {
-            AuthenticationFailureBadCredentialsEvent event = (AuthenticationFailureBadCredentialsEvent) appEvent;
-
-
             // add code here to handle unsuccessful login event
             // for example, counting the number of login failure attempts and storing it in db
             // this count can be used to lock or disable any user account as per business requirements

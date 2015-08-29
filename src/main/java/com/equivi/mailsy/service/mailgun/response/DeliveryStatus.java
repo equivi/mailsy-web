@@ -1,7 +1,7 @@
 package com.equivi.mailsy.service.mailgun.response;
 
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 

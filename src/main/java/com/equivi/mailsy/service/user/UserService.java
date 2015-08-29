@@ -2,6 +2,7 @@ package com.equivi.mailsy.service.user;
 
 
 import com.equivi.mailsy.data.entity.UserEntity;
+import com.equivi.mailsy.dto.login.UserLoginDTO;
 import com.equivi.mailsy.dto.user.UserRequestDTO;
 import org.springframework.data.domain.Page;
 
@@ -24,6 +25,12 @@ public interface UserService {
      * @return UserEntity
      */
     UserEntity getUser(Long userId);
+
+    /**
+     * @param userName
+     * @return UserLoginDTO
+     */
+    UserLoginDTO getUserLoginDTO(final String userName);
 
     /**
      * @param userName

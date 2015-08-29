@@ -2,13 +2,12 @@ package com.equivi.mailsy.web.controller;
 
 
 import com.equivi.mailsy.dto.login.UserLoginDTO;
-import com.equivi.mailsy.service.authentication.AuthenticationService;
+import com.equivi.mailsy.service.user.UserService;
 import com.equivi.mailsy.web.constant.PageConstant;
 import com.equivi.mailsy.web.context.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -30,10 +29,10 @@ public class LoginSecurityController {
     private static final String WELCOME_PAGE = "welcomePage";
     private static final String RESET_PASSWORD = "forceChangePasswordPage";
     private static final String CHANGE_PASSWORD_SUCCESSFULLY = "change.password.succesfully.notification";
+
     @Resource
-    private MessageSource messageSource;
-    @Resource
-    private AuthenticationService authenticationService;
+    private UserService userService;
+
     @Resource
     private SessionUtil sessionUtil;
 
@@ -52,7 +51,7 @@ public class LoginSecurityController {
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
     public ModelAndView getMainMenu(@ModelAttribute ModelAndView modelAndView, HttpServletRequest request, Principal principal) {
-        UserLoginDTO userLoginDTO = authenticationService.getUser(principal.getName());
+        UserLoginDTO userLoginDTO = userService.getUserLoginDTO(principal.getName());
 
         if (userLoginDTO.isResetPasswordRequired()) {
             modelAndView.setViewName(RESET_PASSWORD);

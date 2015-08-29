@@ -5,6 +5,8 @@ import com.equivi.mailsy.service.mailgun.response.MailgunResponseEventMessage;
 import com.equivi.mailsy.service.mailgun.response.MailgunResponseMessage;
 import com.equivi.mailsy.util.MailsyStringUtil;
 import com.equivi.mailsy.web.constant.WebConfiguration;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -14,8 +16,6 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.file.FileDataBodyPart;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -63,7 +63,7 @@ public class MailgunJerseyEmailServiceImpl implements MailgunService {
 
         MailgunResponseMessage mailgunResponseMessage = null;
         try {
-            objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             mailgunResponseMessage = objectMapper.readValue(responseBody, MailgunResponseMessage.class);
         } catch (IOException e) {
             LOG.error(e.getMessage(),e);
@@ -140,7 +140,7 @@ public class MailgunJerseyEmailServiceImpl implements MailgunService {
 
         MailgunResponseMessage mailgunResponseMessage = null;
         try {
-            objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             mailgunResponseMessage = objectMapper.readValue(responseBody, MailgunResponseMessage.class);
         } catch (IOException e) {
            LOG.error(e.getMessage(),e);

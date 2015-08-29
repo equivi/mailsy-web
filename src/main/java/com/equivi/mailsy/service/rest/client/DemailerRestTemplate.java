@@ -3,7 +3,7 @@ package com.equivi.mailsy.service.rest.client;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,7 +36,7 @@ public class DemailerRestTemplate extends RestTemplate {
         requestHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
 
-        MappingJacksonHttpMessageConverter mappingJacksonHttpConverter = new MappingJacksonHttpMessageConverter();
+        MappingJackson2HttpMessageConverter mappingJacksonHttpConverter = new MappingJackson2HttpMessageConverter();
         List<MediaType> supportedMediaTypes = new ArrayList<>();
         supportedMediaTypes.add(new MediaType("text", "plain"));
         supportedMediaTypes.add(new MediaType("application", "json"));
@@ -64,15 +64,17 @@ public class DemailerRestTemplate extends RestTemplate {
         return timeout;
     }
 
+    public String getHostName() {
+        return hostName;
+    }
 
     public DemailerRestTemplate setHostName(String hostName) {
         this.hostName = hostName;
         return this;
     }
 
-    public DemailerRestTemplate setPassword(String password) {
-        this.password = password;
-        return this;
+    public String getUserName() {
+        return userName;
     }
 
     public DemailerRestTemplate setUserName(String userName) {
@@ -80,17 +82,13 @@ public class DemailerRestTemplate extends RestTemplate {
         return this;
     }
 
-
-    public String getHostName() {
-        return hostName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    public DemailerRestTemplate setPassword(String password) {
+        this.password = password;
+        return this;
     }
 
 }

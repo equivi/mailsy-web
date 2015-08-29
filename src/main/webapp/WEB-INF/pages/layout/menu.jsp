@@ -65,7 +65,7 @@
             </a>
         </li>
 
-        <security:authorize ifAnyGranted="MAILSY_ADMIN">
+            <security:authorize access="hasAuthority('MAILSY_ADMIN')">
         <c:if test="${currentPage.currentSubMenu == 'USER_MANAGEMENT'}">
         <li id="user-management" class="active">
             </c:if>

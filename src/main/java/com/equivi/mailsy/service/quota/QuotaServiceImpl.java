@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 
 @Service
@@ -38,6 +39,7 @@ public class QuotaServiceImpl implements QuotaService {
     }
 
     @Override
+    @Transactional
     public QuotaDTO saveQuotaEntity(QuotaDTO quotaDTO) {
         QuotaEntity quotaEntity = quotaDao.findAll().get(0);
 

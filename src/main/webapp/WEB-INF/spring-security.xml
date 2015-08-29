@@ -18,10 +18,10 @@
 
     <security:http auto-config="true" use-expressions="true">
 
-        <security:intercept-url pattern="/main/merchant/**" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/main/merchant/**" access="isAuthenticated"/>
         <security:intercept-url pattern="/main/admin/**"
-                                access="isAuthenticated() and hasRole('MAILSY_ADMIN')"/>
-        <security:intercept-url pattern="/main/**" access="isAuthenticated()"/>
+                                access="isAuthenticated and hasRole('MAILSY_ADMIN')"/>
+        <security:intercept-url pattern="/main/**" access="isAuthenticated"/>
 
         <security:form-login login-page="/login-page"
                              always-use-default-target="true"

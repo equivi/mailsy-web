@@ -9,11 +9,10 @@
     <name>mailsy-web</name>
 
     <properties>
-        <mailsy-data.version>1.0.0-SNAPSHOT</mailsy-data.version>
-        <spring.version>4.0.2.RELEASE</spring.version>
-        <spring.context.version>3.2.0.RELEASE</spring.context.version>
+        <spring.version>4.2.0.RELEASE</spring.version>
+        <activemq.version>5.7.0</activemq.version>
         <aspectj.version>1.8.0</aspectj.version>
-        <spring.security.version>3.2.1.RELEASE</spring.security.version>
+        <spring.security.version>4.0.2.RELEASE</spring.security.version>
         <hibernate.version>4.2.7.Final</hibernate.version>
         <querydsl.version>3.3.1</querydsl.version>
         <maven-apt-plugin.version>1.0</maven-apt-plugin.version>
@@ -32,7 +31,7 @@
         <hibernate.validator.version>4.2.0.Final</hibernate.validator.version>
         <velocity.version>1.6.2</velocity.version>
         <mail.version>1.4.4</mail.version>
-        <jackson.version>1.9.13</jackson.version>
+        <jackson.version>2.6.1</jackson.version>
         <itext.version>5.5.0</itext.version>
         <poi.version>3.10-FINAL</poi.version>
         <ehcache.version>2.8.1</ehcache.version>
@@ -55,7 +54,13 @@
         <dependency>
             <groupId>com.equivi</groupId>
             <artifactId>mailsy-data-access</artifactId>
-            <version>${mailsy-data.version}</version>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.equivi</groupId>
+            <artifactId>mailsy-service-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
 
@@ -93,7 +98,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${spring.context.version}</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <!--Aspect -->
@@ -111,21 +116,21 @@
 
         <!-- Jackson JSON Mapper -->
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.4.0</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
@@ -137,7 +142,7 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>${mail.version}</version>
+            <version>${java.mail.api}</version>
         </dependency>
 
 
@@ -376,6 +381,10 @@
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
+                <configuration>
+                    <path>/mailsy-web</path>
+                    <port>8080</port>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

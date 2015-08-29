@@ -43,7 +43,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="${pageContext.request.contextPath}/j_spring_security_logout"/>
+                            <a href="${pageContext.request.contextPath}/logout"/>
                             <i class="icon-off"></i>
                             <spring:message code="label.logout"/>
                             </a>

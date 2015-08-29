@@ -2,7 +2,7 @@ package com.equivi.mailsy.service.emailverifier.byteplant;
 
 
 import com.equivi.mailsy.service.emailverifier.EmailVerifierResponse;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BytePlantEmailVerifierResponse implements EmailVerifierResponse {
 

@@ -6,6 +6,7 @@ import com.equivi.mailsy.data.entity.QQueueCampaignMailerEntity;
 import com.equivi.mailsy.data.entity.QueueCampaignMailerEntity;
 import com.equivi.mailsy.data.entity.QueueProcessed;
 import com.equivi.mailsy.dto.quota.QuotaDTO;
+import com.equivi.mailsy.service.messaging.JMSConsoleToProcessorSender;
 import com.equivi.mailsy.service.quota.QuotaService;
 import com.google.common.collect.Lists;
 import com.mysema.query.BooleanBuilder;
@@ -31,22 +32,24 @@ public class QueueCampaignServiceImpl implements QueueCampaignService {
     @Autowired
     private QuotaService quotaService;
 
+    @Autowired
+    private JMSConsoleToProcessorSender jmsConsoleToProcessorSender;
+
     @Override
     @Transactional(readOnly = false)
-    public void sendCampaignToQueueMailer(List<CampaignSubscriberGroupEntity> campaignSubscriberGroupEntityList) {
+    public void sendCampaignToQueueMailer(Long campaignId) {
+         jmsConsoleToProcessorSender.sendToProcessorQueue(campaignId);
 
-        if (campaignSubscriberGroupEntityList != null && !campaignSubscriberGroupEntityList.isEmpty()) {
+        QuotaDTO quotaDTO = new QuotaDTO();
+        quotaDTO.setEmailSendingQuota(1);
+        quotaService.saveQuotaEntity(quotaDTO);
 
-            List<QueueCampaignMailerEntity> queueCampaignMailerEntityList = queueCampaignMailerConverter.convertToQueueCampaignMailerList(campaignSubscriberGroupEntityList);
-
-            if (queueCampaignMailerEntityList != null && !queueCampaignMailerEntityList.isEmpty()) {
-                queueCampaignMailerDao.save(queueCampaignMailerEntityList);
-            } else {
-                LOG.error("Nothing to put to queue");
-            }
-        }
+        QuotaDTO quotaDTO2 = new QuotaDTO();
+        quotaDTO2.setEmailSendingQuota(1);
+        quotaService.saveQuotaEntity(quotaDTO2);
 
     }
+
 
     @Override
     @Transactional(readOnly = true)

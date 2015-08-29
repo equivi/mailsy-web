@@ -6,11 +6,13 @@ import com.equivi.mailsy.data.entity.QUserEntity;
 import com.equivi.mailsy.data.entity.UserEntity;
 import com.equivi.mailsy.data.entity.UserRole;
 import com.equivi.mailsy.data.entity.UserStatus;
+import com.equivi.mailsy.dto.login.UserLoginDTO;
 import com.equivi.mailsy.dto.user.UserRequestDTO;
 import com.equivi.mailsy.service.authentication.AuthenticationPredicate;
 import com.equivi.mailsy.service.encryption.EncryptionService;
 import com.equivi.mailsy.service.encryption.PasswordService;
 import com.equivi.mailsy.service.encryption.PasswordUtil;
+import com.equivi.mailsy.service.exception.AuthenticationFailureException;
 import com.equivi.mailsy.service.exception.InvalidDataException;
 import com.equivi.mailsy.service.user.validator.UserServiceValidator;
 import com.mysema.query.BooleanBuilder;
@@ -24,27 +26,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 @Transactional(value = "transactionManager")
 public class UserServiceImpl implements UserService {
 
+    public static final int MAX_FAILED_LOGIN = 3;
+    static final String INVALID_USER_NAME_OR_PASSWORD = "Bad user name or password entered! Pls try again";
+    private static final String USER_STATUS_INACTIVE = "Unable to login,user is inactive";
+    private static final String USER_STATUS_LOCKED = "Unable to login,user is locked";
     @Resource
     private UserDao userDao;
-
     @Resource
     private PasswordService passwordService;
-
     @Resource
     private AuthenticationPredicate authenticationPredicate;
-
     @Resource
     private EncryptionService encryptionService;
-
     @Resource
     private UserMailService userMailService;
-
     @Resource
     private UserServiceValidator userServiceValidator;
 
@@ -110,17 +115,6 @@ public class UserServiceImpl implements UserService {
 
 
         return userEntity.getId();
-    }
-
-    private List<String> convertToBranchCodeGenericList(String userBranchCodeSelected) {
-        String[] branchCodeArr = userBranchCodeSelected.split(",");
-
-        Set<String> branchCodeSetUnique = new HashSet<>();
-
-        for (String branchCode : branchCodeArr) {
-            branchCodeSetUnique.add(branchCode);
-        }
-        return new ArrayList<>(branchCodeSetUnique);
     }
 
     private UserEntity convertAndFillInValueToUserEntity(UserRequestDTO userRequestDTO) {
@@ -212,7 +206,7 @@ public class UserServiceImpl implements UserService {
             }
             failedLogin++;
 
-            if (failedLogin == 3) {
+            if (failedLogin == MAX_FAILED_LOGIN) {
                 userEntity.setUserStatus(UserStatus.LOCKED);
             }
             userEntity.setFailedLoginCounter(failedLogin);
@@ -254,6 +248,43 @@ public class UserServiceImpl implements UserService {
 
             userMailService.sendEmailForPasswordUpdate(userRequestDTO);
         }
+    }
+
+    @Override
+    public UserLoginDTO getUserLoginDTO(final String userName) {
+
+        Iterable<UserEntity> userEntityList = userDao.findAll(authenticationPredicate.getUserByUserName(userName));
+
+        if (userEntityList == null || !userEntityList.iterator().hasNext()) {
+            throw new AuthenticationFailureException(INVALID_USER_NAME_OR_PASSWORD);
+        }
+
+        List<UserEntity> userEntities = constructList(userEntityList);
+
+        UserEntity userEntity = userEntities.get(0);
+
+        if (userEntity.getUserStatus().equals(UserStatus.INACTIVE)) {
+            throw new AuthenticationFailureException(USER_STATUS_INACTIVE);
+        }
+
+        if (userEntity.getUserStatus().equals(UserStatus.LOCKED)) {
+            throw new AuthenticationFailureException(USER_STATUS_LOCKED);
+        }
+
+        return buildUserLoginResponseDTO(userEntities.get(0));
+    }
+
+    private UserLoginDTO buildUserLoginResponseDTO(UserEntity userEntity) {
+        UserLoginDTO userLoginDTO = new UserLoginDTO();
+        userLoginDTO.setUserId(userEntity.getId());
+        userLoginDTO.setUserName(userEntity.getUserName());
+        userLoginDTO.setFirstName(userEntity.getFirstName());
+        userLoginDTO.setLastName(userEntity.getLastName());
+        userLoginDTO.setResetPasswordRequired(userEntity.isResetPasswordRequired());
+        userLoginDTO.setUserRole(userEntity.getUserRole());
+        userLoginDTO.setUserStatus(userEntity.getUserStatus());
+
+        return userLoginDTO;
     }
 
     @Override
@@ -308,11 +339,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = false)
     public void deleteUser(Long userId) {
-        if (userId == 1) {
+        if (isSuperUser(userId)) {
             throw new InvalidDataException("failed.to.delete.super.admin");
         }
-        UserEntity userEntity = userDao.findOne(userId);
         userDao.delete(userId);
+    }
+
+    private boolean isSuperUser(Long userId) {
+        return userId == 1;
     }
 
     @Override

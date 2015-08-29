@@ -160,9 +160,9 @@ public class CampaignManagementServiceImpl implements CampaignManagementService 
         campaignDao.save(campaignEntity);
 
         //Send to queue mailer
-        List<CampaignSubscriberGroupEntity> campaignSubscriberGroupEntityList = Lists.newArrayList(campaignSubscriberGroupDao.findAll(getCampaignSubscriberGroupPredicate(campaignEntity)));
+        //List<CampaignSubscriberGroupEntity> campaignSubscriberGroupEntityList = Lists.newArrayList(campaignSubscriberGroupDao.findAll(getCampaignSubscriberGroupPredicate(campaignEntity)));
 
-        queueCampaignService.sendCampaignToQueueMailer(campaignSubscriberGroupEntityList);
+        queueCampaignService.sendCampaignToQueueMailer(campaignId);
     }
 
     private CampaignEntity saveCampaignEntity(CampaignDTO campaignDTO) {

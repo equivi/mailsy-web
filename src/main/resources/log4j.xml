@@ -3,7 +3,7 @@
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
     <appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="file" value="/opt/demailer/logs/dEmailer-Web.log"/>
+        <param name="file" value="/opt/demailer/logs/mailsy-web.log"/>
         <param name="Append" value="true"/>
         <param name="Threshold" value="ALL"/>
         <param name="DatePattern" value="'.'yyyy-MM-dd"/>

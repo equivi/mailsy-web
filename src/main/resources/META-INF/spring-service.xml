@@ -15,7 +15,8 @@
                            http://www.springframework.org/schema/task/spring-task.xsd">
 
     <!--Import dEmailer Web Data Access-->
-    <import resource="demailer-web-data-access.xml"/>
+    <import resource="mailsy-web-data-access.xml"/>
+
     <context:component-scan base-package="com.equivi.mailsy"/>
 
     <util:properties id="applicationProps" location="file:/opt/demailer/conf/demailer_web.properties"/>
@@ -26,7 +27,7 @@
     <task:executor id="mailsyExecutor" pool-size="5"/>
     <task:scheduler id="mailsyScheduler" pool-size="10"/>
 
-    <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
 
     <bean class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean" id="emailVerifierServiceFactory">
         <property name="serviceLocatorInterface"
