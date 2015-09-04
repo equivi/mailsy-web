@@ -15,9 +15,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 
 public class CampaignConverterTest {
 
@@ -52,19 +52,14 @@ public class CampaignConverterTest {
         assertEquals("Test content", campaignEntity.getEmailContent());
         assertEquals("C123", campaignEntity.getCampaignName());
         assertEquals(StringEscapeUtils.escapeHtml4("<ADV> Adv Weekly"), campaignEntity.getEmailSubject());
-
-        Date expectedScheduledDate = sdf.parse("25-09-2014 15:38");
-
-        assertEquals(expectedScheduledDate, campaignEntity.getScheduledSendDate());
-
-        assertEquals("25-09-2014 15:38", sdf.format(campaignEntity.getScheduledSendDate()));
+        assertNull(campaignEntity.getScheduledSendDate());
     }
 
     private CampaignDTO getCampaignDTO() {
         CampaignDTO campaignDTO = new CampaignDTO();
         campaignDTO.setEmailFrom("zztop_aditya@yahoo.com");
         campaignDTO.setEmailSubject("<ADV> Adv Weekly");
-        campaignDTO.setScheduledSendDateTime("25-09-2014 15:38");
+        campaignDTO.setScheduledSendDateTime(null);
         campaignDTO.setCampaignStatus(CampaignStatus.DRAFT.getCampaignStatusDescription());
         campaignDTO.setEmailContent("Test content");
         campaignDTO.setCampaignName("C123");
