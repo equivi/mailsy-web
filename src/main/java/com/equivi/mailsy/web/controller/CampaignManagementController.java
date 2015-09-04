@@ -6,7 +6,6 @@ import com.equivi.mailsy.data.entity.CampaignStatus;
 import com.equivi.mailsy.data.entity.SubscriberGroupEntity;
 import com.equivi.mailsy.dto.campaign.CampaignDTO;
 import com.equivi.mailsy.dto.campaign.CampaignStatisticDTO;
-import com.equivi.mailsy.dto.campaign.EmailTemplateDTO;
 import com.equivi.mailsy.dto.quota.QuotaDTO;
 import com.equivi.mailsy.dto.subscriber.SubscriberGroupDTO;
 import com.equivi.mailsy.service.campaign.CampaignManagementService;
@@ -24,7 +23,6 @@ import com.equivi.mailsy.web.constant.WebConfiguration;
 import com.equivi.mailsy.web.message.ErrorMessage;
 import com.google.common.collect.Lists;
 import gnu.trove.map.hash.THashMap;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -37,7 +35,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -193,7 +190,7 @@ public class CampaignManagementController extends AbstractController {
     }
 
     @RequestMapping(value = "/main/merchant/campaign_management/{campaignId}/{pageName}", method = RequestMethod.GET)
-    public ModelAndView goToEditCampaignPage(ModelAndView modelAndView, @PathVariable Long campaignId, @PathVariable String pageName, final HttpServletRequest httpServletRequest, Model model) {
+    public ModelAndView goToEditCampaignPage(ModelAndView modelAndView, @PathVariable Long campaignId, @PathVariable String pageName, Model model) {
         CampaignDTO campaignDTO = campaignManagementService.getCampaign(campaignId);
 
         setPredefinedData(modelAndView, campaignDTO);
@@ -362,29 +359,30 @@ public class CampaignManagementController extends AbstractController {
         return subscriberGroupIdList;
     }
 
-    private void getEmailTemplates(HttpServletRequest request) throws UnsupportedEncodingException {
-        List<EmailTemplateDTO> emailTemplates = Lists.newArrayList();
-        File emailTemplateDir = new File(WebConfigUtil.getValue(dEmailerWebPropertyKey.EMAIL_TEMPLATE_DIR));
-        String[] extensions = new String[]{"html"};
-        String encodedDir = StringUtils.replace(emailTemplateDir.getAbsolutePath(), "/", "%2f");
 
-        Iterator<File> iterator = FileUtils.iterateFiles(emailTemplateDir, extensions, false);
-
-        while (iterator.hasNext()) {
-            File next = iterator.next();
-            String fileName = next.getName();
-
-            String htmlSuffix = ".html";
-            if (StringUtils.endsWith(fileName, htmlSuffix)) {
-                String templateName = StringUtils.removeEnd(fileName, htmlSuffix);
-
-                EmailTemplateDTO emailTemplateDTO = new EmailTemplateDTO(templateName + ".png", fileName, encodedDir);
-                emailTemplates.add(emailTemplateDTO);
-            }
-        }
-
-        request.getSession().setAttribute(SESSION_EMAIL_TEMPLATES, emailTemplates);
-    }
+//    private void getEmailTemplates(HttpServletRequest request) throws UnsupportedEncodingException {
+//        List<EmailTemplateDTO> emailTemplates = Lists.newArrayList();
+//        File emailTemplateDir = new File(WebConfigUtil.getValue(dEmailerWebPropertyKey.EMAIL_TEMPLATE_DIR));
+//        String[] extensions = new String[]{"html"};
+//        String encodedDir = StringUtils.replace(emailTemplateDir.getAbsolutePath(), "/", "%2f");
+//
+//        Iterator<File> iterator = FileUtils.iterateFiles(emailTemplateDir, extensions, false);
+//
+//        while (iterator.hasNext()) {
+//            File next = iterator.next();
+//            String fileName = next.getName();
+//
+//            String htmlSuffix = ".html";
+//            if (StringUtils.endsWith(fileName, htmlSuffix)) {
+//                String templateName = StringUtils.removeEnd(fileName, htmlSuffix);
+//
+//                EmailTemplateDTO emailTemplateDTO = new EmailTemplateDTO(templateName + ".png", fileName, encodedDir);
+//                emailTemplates.add(emailTemplateDTO);
+//            }
+//        }
+//
+//        request.getSession().setAttribute(SESSION_EMAIL_TEMPLATES, emailTemplates);
+//    }
 
 
     @RequestMapping(value = "/main/merchant/opened_email/putResultToSession", method = RequestMethod.POST)

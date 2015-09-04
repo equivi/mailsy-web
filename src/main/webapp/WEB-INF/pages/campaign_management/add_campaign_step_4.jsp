@@ -8,9 +8,9 @@
     </h1>
 </div>
 
-
 <c:set var="sendDate"><spring:message code="label.campaign.scheduled_send_date"/></c:set>
 
+<jsp:include page="email_quota.jsp"/>
 <jsp:include page="campaign_wizard_header_step4.jsp"/>
 </br>
 <div align="right">
@@ -89,7 +89,7 @@
         </button>
         &nbsp; &nbsp; &nbsp;
 
-        <button class="btn btn-success btn-next" type="submit" onclick="goToScheduleDeliveryDate(${campaignDTO.id})">
+        <button class="btn btn-success btn-next" type="submit" onclick="sendEmail(${campaignDTO.id})">
             <spring:message code="label.confirm"/>
             <i class="icon-arrow-right icon-on-right"></i>
         </button>
@@ -109,6 +109,16 @@
 
 <c:set var="campaignId" value="${campaignDTO.id}"/>
 <script type="text/javascript">
+
+    jQuery(window).load(function () {
+        // quota info
+        var emailSendingQuota = parseInt($("#emailSendingQuota").val());
+        var emailSendingQuotaUsed = parseInt($("#emailSendingQuotaUsed").val());
+
+        if (emailSendingQuotaUsed >= emailSendingQuota) {
+            $("#btn-send-email").attr('disabled', 'disabled');
+        }
+    });
 
     jQuery(function ($) {
         $("#test_email").on(ace.click_event, function () {
@@ -144,8 +154,36 @@
         });
     });
 
-    function goToScheduleDeliveryDate(campaignId) {
-        window.location.replace("${context}/main/merchant/campaign_management/" + campaignId + "/campaignManagementEmailDeliveryPage");
+    <%--function goToScheduleDeliveryDate(campaignId) {--%>
+        <%--window.location.replace("${context}/main/merchant/campaign_management/" + campaignId + "/campaignManagementEmailDeliveryPage");--%>
+    <%--}--%>
+
+    function sendEmail(campaignId) {
+        // quota info
+        var emailSendingQuota = parseInt($("#emailSendingQuota").val());
+        var emailSendingQuotaUsed = parseInt($("#emailSendingQuotaUsed").val());
+
+        if (emailSendingQuotaUsed < emailSendingQuota) {
+            var url = "${context}/main/merchant/campaign_management/" + campaignId + "/saveCampaignDelivery";
+
+            var scheduledDate = $('#id-date-picker-1').val();
+            var scheduledTime = $('#timepicker1').val();
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: scheduledDate + " " + scheduledTime,
+
+                contentType: 'application/json',
+                success: function () {
+                    window.location.replace("${context}/main/merchant/campaign_management/goToFinishPage");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Save email content - the following error occured: " + textStatus, errorThrown);
+                }
+            });
+        }
+
     }
 
     function backToRecipients(campaignId) {

@@ -26,13 +26,13 @@
         </li>
 
 
+        <%--<li data-target="#step5">--%>
+            <%--<span class="step">5</span>--%>
+            <%--<span class="title"><spring:message code="label.campaign.scheduled_send_date"/></span>--%>
+        <%--</li>--%>
+
         <li data-target="#step5">
             <span class="step">5</span>
-            <span class="title"><spring:message code="label.campaign.scheduled_send_date"/></span>
-        </li>
-
-        <li data-target="#step6">
-            <span class="step">6</span>
             <span class="title"><spring:message code="label.finish"/></span>
         </li>
     </ul>

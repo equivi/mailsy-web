@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -48,13 +47,13 @@ public class CampaignConverter {
         campaignEntity.setCampaignStatus(CampaignStatus.getStatusByDescription(campaignDTO.getCampaignStatus()));
 
 
-        if (!StringUtils.isEmpty(campaignDTO.getScheduledSendDateTime())) {
-            try {
-                campaignEntity.setScheduledSendDate(sdf.parse(campaignDTO.getScheduledSendDateTime()));
-            } catch (ParseException e) {
-                LOG.error(e.getMessage(), e);
-            }
-        }
+//        if (!StringUtils.isEmpty(campaignDTO.getScheduledSendDateTime())) {
+//            try {
+//                campaignEntity.setScheduledSendDate(sdf.parse(campaignDTO.getScheduledSendDateTime()));
+//            } catch (ParseException e) {
+//                LOG.error(e.getMessage(), e);
+//            }
+//        }
         return campaignEntity;
     }
 
