@@ -15,6 +15,8 @@ public enum dEmailerWebPropertyKey {
     EMAIL_VERIFIER_API_TIMEOUT("email.verifier.api.timeout"),
     EMAIL_VERIFIER_URL("email.verifier.url"),
     MAILGUN_WEB_URL("mailgun.web.url"),
+    REGISTRY_CHECK_WEB_URL("registry.check.url"),
+    REGISTRATION_KEY("mailsy.registration.key"),
     MAILGUN_API_KEY("mailgun.api.key"),
     ADMIN_EMAIL_FROM("admin.email.from"),
     EMAIL_CRAWLING_STORAGE("email.crawling.storage.dir"),
