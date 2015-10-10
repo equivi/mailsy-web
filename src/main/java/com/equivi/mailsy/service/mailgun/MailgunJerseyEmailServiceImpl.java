@@ -18,7 +18,6 @@ import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -93,7 +92,7 @@ public class MailgunJerseyEmailServiceImpl implements MailgunService {
 
     @Override
     public MailgunResponseEventMessage getEventForMessageId(String messageId) {
-        return null;
+        throw new UnsupportedOperationException("getEventForMessageId not supported for this service");
     }
 
     @Override
@@ -152,32 +151,17 @@ public class MailgunJerseyEmailServiceImpl implements MailgunService {
 
     @Override
     public void deleteUnsubscribe(String domain, String emailAddress) {
-
-        throw new IllegalAccessError("Unable to access this method");
+        throw new UnsupportedOperationException("deleteUnsubscribe not supported for this service");
     }
 
     @Override
     public void registerUnsubscribe(String domain, String emailAddress) {
-        Client client = prepareClient();
-        WebResource webResource = client.resource(getWebConfigAPIUrlMessage(getDomain(domain), MailgunAPIType.UNSUBSCRIBES));
-
-        MultivaluedMapImpl form = new MultivaluedMapImpl();
-        form.add(MailgunParameters.ADDRESS.getValue(), emailAddress);
-        form.add(MailgunParameters.TAG.getValue(), "*");
-
-        ClientResponse clientResponse = webResource.post(ClientResponse.class, form);
-        String responseBody = clientResponse.getEntity(String.class);
-
-        LOG.info("Response Body :" + responseBody);
-
-        if (clientResponse.getStatus() != HttpStatus.OK.value()) {
-            throw new MailgunServiceException(MailgunServiceException.UNABLE_TO_UNSUBSCRIBE_EMAIL_ADDRESS);
-        }
+        throw new UnsupportedOperationException("registerUnsubscribe not supported for this service");
     }
 
     @Override
     public List<String> getUnsubscribeList(String domain) {
-        return null;
+        throw new UnsupportedOperationException("getUnsubscribeList not supported for this service");
     }
 
     @Override

@@ -18,7 +18,7 @@ public class UnsubscribeController {
     static final String UNSUBSCRIBED_PAGE_NOTIFICATION = "unsubscribeNotificationPage";
 
 
-    @Resource(name = "mailgunJerseyService")
+    @Resource(name = "mailgunRestTemplateEmailService")
     private MailgunService mailgunJerseyService;
 
     @RequestMapping(value = "/unsubscribe", method = RequestMethod.GET)
