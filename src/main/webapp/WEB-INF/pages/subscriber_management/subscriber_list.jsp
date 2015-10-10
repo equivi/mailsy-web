@@ -78,9 +78,9 @@
                             </c:if>
                         </li>
 
-                        <li>
-                            <a href="#" id="${subscriber.id}" class="deleteContact">Delete</a>
-                        </li>
+                        <%--<li>--%>
+                            <%--<a href="#" id="${subscriber.id}" class="deleteContact">Delete</a>--%>
+                        <%--</li>--%>
                     </ul>
                 </div>
                 <!-- /btn-group -->

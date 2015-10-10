@@ -177,17 +177,10 @@ public class MailgunRestTemplateEmailServiceImpl implements MailgunService {
         return mailParameter;
     }
 
-    Map<String, String> buildUnsubscribeParameter(String emailAddress) {
-        Map<String, String> mailParameter = new THashMap<>();
-        mailParameter.put(MailgunParameters.ADDRESS.getValue(), emailAddress);
-        mailParameter.put(MailgunParameters.TAG.getValue(), "*");
-
-        return mailParameter;
-    }
 
    @Override
     public void deleteUnsubscribe(String domain, String emailAddress) {
-        String deleteUnsubscribeURL = buildUnsubscribeUrl(domain, emailAddress);
+        String deleteUnsubscribeURL = buildGetUnsubscribeListUrl(domain, emailAddress);
         setupHttpClientCredentials(deleteUnsubscribeURL);
         try {
             LOG.info("Delete unsubscribe :" + emailAddress);
@@ -221,7 +214,7 @@ public class MailgunRestTemplateEmailServiceImpl implements MailgunService {
 
     @Override
     public List<String> getUnsubscribeList(String domain) {
-        String getUnsubscibeListUrl = buildUnsubscribeUrl(getDomain(domain), null);
+        String getUnsubscibeListUrl = buildGetUnsubscribeListUrl(getDomain(domain), null);
         setupHttpClientCredentials(getUnsubscibeListUrl);
         ResponseEntity<UnsubscribeResponse> response = demailerRestTemplate.getForEntity(getUnsubscibeListUrl, UnsubscribeResponse.class);
         if (response != null) {
@@ -250,7 +243,7 @@ public class MailgunRestTemplateEmailServiceImpl implements MailgunService {
 
     @Override
     public boolean checkIfEmailAddressHasBeenUnsubscribed(String domain, String emailAddress) {
-        String unsubscribeUrl = buildRegisterUnsubscribeUrl(getDomain(domain), emailAddress);
+        String unsubscribeUrl = buildGetUnsubscribeListUrl(getDomain(domain), emailAddress);
         setupHttpClientCredentials(unsubscribeUrl);
         ResponseEntity<String> response = demailerRestTemplate.getForEntity(unsubscribeUrl, String.class);
         if (response != null) {
@@ -275,7 +268,7 @@ public class MailgunRestTemplateEmailServiceImpl implements MailgunService {
         return false;
     }
 
-    private String buildUnsubscribeUrl(String domain, String emailAddress) {
+    private String buildGetUnsubscribeListUrl(String domain, String emailAddress) {
         StringBuilder sbUnsubscriberURL = new StringBuilder();
         String mailgunEventAPIURL = formatMailgunHostUrl(getMailgunBaseAPIURL(), getDomain(domain), null, MailgunAPIType.UNSUBSCRIBES.getValue());
         sbUnsubscriberURL.append(mailgunEventAPIURL);
@@ -289,7 +282,7 @@ public class MailgunRestTemplateEmailServiceImpl implements MailgunService {
     private String buildRegisterUnsubscribeUrl(String domain, String emailAddress) {
         String mailgunEventAPIURL = formatMailgunHostUrl(getMailgunBaseAPIURL(), getDomain(domain),
                 null, MailgunAPIType.UNSUBSCRIBES.getValue());
-        mailgunEventAPIURL+="/"+emailAddress;
+        mailgunEventAPIURL+="?address="+emailAddress;
         return mailgunEventAPIURL;
     }
 

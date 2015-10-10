@@ -11,6 +11,7 @@ import com.equivi.mailsy.service.contact.ContactConverter;
 import com.equivi.mailsy.service.contact.ContactManagementService;
 import com.google.common.collect.Lists;
 import com.mysema.query.types.Predicate;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,19 +77,21 @@ public class SubscriberServiceImpl implements SubscriberService {
 
         if (contactDTOList != null && !contactDTOList.isEmpty()) {
             for (ContactDTO contactDTO : contactDTOList) {
-                ContactEntity contactEntity = contactManagementService.getContactEntityByEmailAddress(contactDTO.getEmailAddress());
-                if (contactEntity == null) {
-                    contactEntity = contactManagementService.saveContactEntity(contactDTO);
-                }
-                else{
-                    contactEntity = contactConverter.convertToEntity(contactEntity,contactDTO);
-                    contactManagementService.saveContactEntity(contactEntity);
-                }
-                SubscriberContactEntity subscriberContactEntity = new SubscriberContactEntity();
-                subscriberContactEntity.setContactEntity(contactEntity);
-                subscriberContactEntity.setSubscriberGroupEntity(subscriberGroupEntity);
+                if (StringUtils.isNotEmpty(contactDTO.getEmailAddress())) {
+                    ContactEntity contactEntity = contactManagementService.getContactEntityByEmailAddress(contactDTO.getEmailAddress());
+                    if (contactEntity == null) {
+                        contactEntity = contactManagementService.saveContactEntity(contactDTO);
+                    } else {
+                        contactEntity = contactConverter.convertToEntity(contactEntity, contactDTO);
+                        contactManagementService.saveContactEntity(contactEntity);
+                    }
+                    SubscriberContactEntity subscriberContactEntity = new SubscriberContactEntity();
+                    subscriberContactEntity.setContactEntity(contactEntity);
+                    subscriberContactEntity.setSubscriberGroupEntity(subscriberGroupEntity);
 
-                subscriberContactDao.save(subscriberContactEntity);
+                    subscriberContactDao.save(subscriberContactEntity);
+
+                }
             }
         }
     }
