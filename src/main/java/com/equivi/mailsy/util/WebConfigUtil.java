@@ -21,7 +21,8 @@ public class WebConfigUtil {
     static {
         properties = new Properties();
         try {
-            is = new FileInputStream("/opt/demailer/conf/demailer_web.properties");
+            String propertyLocation = System.getProperty("propertyLocation");
+            is = new FileInputStream(propertyLocation);
             properties.load(is);
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage());

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:task="http://www.springframework.org/schema/task"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/util
-                           http://www.springframework.org/schema/util/spring-util.xsd
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/task
@@ -17,10 +14,6 @@
     <!--Import dEmailer Web Data Access-->
     <import resource="demailer-web-data-access.xml"/>
     <context:component-scan base-package="com.equivi.mailsy"/>
-
-    <util:properties id="applicationProps" location="file:/opt/demailer/conf/demailer_web.properties"/>
-
-    <context:property-placeholder properties-ref="applicationProps"/>
 
     <task:annotation-driven executor="mailsyExecutor" scheduler="mailsyScheduler"/>
     <task:executor id="mailsyExecutor" pool-size="5"/>
@@ -47,15 +40,6 @@
                 <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
                 <prop key="mail.debug">${mail.debug}</prop>
             </props>
-        </property>
-    </bean>
-
-    <bean id="dEmailerEmailProperties"
-          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="locations">
-            <list>
-                <value>file:/opt/demailer/conf/email_setup.properties</value>
-            </list>
         </property>
     </bean>
 
